@@ -26,7 +26,7 @@
       value="#{testView.list}"
       draggableRows="true"
       rowKey="#{element.id}"
-      rowStatePreserved="true">
+      draggableRowsFunction="#{testView.onDraggableRow}">
       <p:ajax
         event="rowReorder"
         listener="#{testView.onRowReorder}"
