@@ -1,21 +1,86 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:f="jakarta.faces.core"
-      xmlns:h="jakarta.faces.html"
-      xmlns:p="primefaces">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="jakarta.faces.facelets"
+  xmlns:f="jakarta.faces.core"
+  xmlns:h="jakarta.faces.html"
+  xmlns:p="primefaces">
 
-    <h:head>
-        <title>PrimeFaces Test</title>
-        <h:outputScript name="test.js" />
-        <h:outputStylesheet name="test.css" />
-    </h:head>
-    <h:body>
+<h:head>
+  <title>PrimeFaces Test</title>
+  <h:outputScript name="test.js" />
+  <h:outputStylesheet name="test.css" />
+</h:head>
+<h:body>
 
-        <h1>#{testView.string}</h1>
-        <h:form id="frmTest">
+  <h1>#{testView.string}</h1>
+  <h:form id="frmTest">
+    <p:growl
+      id="msgs"
+      showDetail="true"
+      skipDetailIfEqualsSummary="true" />
 
-        </h:form>
+    <p:dataTable
+      id="dataTable"
+      var="element"
+      value="#{testView.list}"
+      rowKey="#{element.id}">
 
-    </h:body>
+      <p:column headerText="ID">
+        <h:outputText value="#{element.id}" />
+      </p:column>
+
+      <p:column headerText="Name">
+        <h:outputText value="#{element.name}" />
+      </p:column>
+
+      <p:column headerText="Artist">
+        <h:outputText value="#{element.artist}" />
+      </p:column>
+
+      <p:column headerText="Songs">
+        <h:panelGroup id="songs-icon">
+          <em class="pi pi-list" />
+        </h:panelGroup>
+        <p:overlayPanel for="songs-icon">
+          <p:dataTable
+            id="songsTable"
+            var="song"
+            value="#{element.songs}"
+            widgetVar="songsTableWidgetVar"
+            rowKey="#{song.id}"
+            selectionMode="single"
+            selection="#{testView.selectedSong}">
+            <p:ajax
+              event="rowSelect"
+              listener="#{testView.onRowSelect}"
+              update="buttonPanel :frmTest:msgs" />
+            <p:ajax
+              event="rowUnselect"
+              update="buttonPanel :frmTest:msgs" />
+            <p:column
+              headerText="Song Name">
+              <h:outputText value="#{song.songName}" />
+            </p:column>
+            <p:column headerText="Duration">
+              <h:outputText value="#{song.duration}" />
+            </p:column>
+            <f:facet name="footer">
+              <h:panelGroup id="buttonPanel">
+                <p:commandButton
+                  value="Play"
+                  icon="pi pi-play"
+                  action="#{worksheetBean.onPlaySong(element)}"
+                  update=":frmTest:msgs"
+                  rendered="#{not empty testView.selectedSong}" />
+              </h:panelGroup>
+            </f:facet>
+          </p:dataTable>
+        </p:overlayPanel>
+      </p:column>
+
+    </p:dataTable>
+  </h:form>
+
+</h:body>
 </html>
