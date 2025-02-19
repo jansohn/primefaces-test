@@ -1,21 +1,75 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:f="jakarta.faces.core"
-      xmlns:h="jakarta.faces.html"
-      xmlns:p="primefaces">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="jakarta.faces.facelets"
+  xmlns:f="jakarta.faces.core"
+  xmlns:h="jakarta.faces.html"
+  xmlns:p="primefaces">
 
-    <h:head>
-        <title>PrimeFaces Test</title>
-        <h:outputScript name="test.js" />
-        <h:outputStylesheet name="test.css" />
-    </h:head>
-    <h:body>
+<h:head>
+  <title>PrimeFaces Test</title>
+  <h:outputScript name="test.js" />
+  <h:outputStylesheet name="test.css" />
+</h:head>
+<h:body>
 
-        <h1>#{testView.string}</h1>
-        <h:form id="frmTest">
+  <h1>#{testView.string}</h1>
+  <h:form id="frmTest">
+    <p:growl
+      id="msgs"
+      showDetail="true"
+      skipDetailIfEqualsSummary="true" />
 
-        </h:form>
+    <p:dataTable
+      id="dataTable"
+      var="element"
+      value="#{testView.list}"
+      draggableRows="true"
+      rowKey="#{element.id}">
+      <p:ajax
+        event="rowReorder"
+        listener="#{testView.onRowReorder}"
+        update="@this :frmTest:msgs" />
 
-    </h:body>
+      <p:column style="width:16px">
+        <p:rowToggler />
+      </p:column>
+
+      <p:column headerText="ID">
+        <h:outputText value="#{element.id}" />
+      </p:column>
+
+      <p:column headerText="Name">
+        <h:outputText value="#{element.name}" />
+      </p:column>
+
+      <p:column headerText="Artist">
+        <p:selectOneMenu
+          id="artistInput"
+          value="#{element.artist}">
+          <p:ajax
+            listener="#{testView.actionArtistSelected}"
+            update="dataTable :frmTest:msgs" />
+          <f:selectItems
+            value="#{testView.artists}"
+            var="artist"
+            itemValue="#{artist}" />
+        </p:selectOneMenu>
+      </p:column>
+
+      <p:column headerText="Artist (Static)">
+        <h:outputText value="#{element.artist}" />
+      </p:column>
+
+      <p:rowExpansion>
+        <p:panelGrid columns="2">
+          <h:outputText value="Name: #{element.name}" />
+          <h:outputText value="Artist: #{element.artist}" />
+        </p:panelGrid>
+      </p:rowExpansion>
+
+    </p:dataTable>
+  </h:form>
+
+</h:body>
 </html>
