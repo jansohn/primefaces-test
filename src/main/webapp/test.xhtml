@@ -1,21 +1,57 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:f="jakarta.faces.core"
-      xmlns:h="jakarta.faces.html"
-      xmlns:p="primefaces">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="jakarta.faces.facelets"
+  xmlns:f="jakarta.faces.core"
+  xmlns:h="jakarta.faces.html"
+  xmlns:p="primefaces">
 
-    <h:head>
-        <title>PrimeFaces Test</title>
-        <h:outputScript name="test.js" />
-        <h:outputStylesheet name="test.css" />
-    </h:head>
-    <h:body>
+<h:head>
+  <title>PrimeFaces Test</title>
+  <h:outputScript name="test.js" />
+  <h:outputStylesheet name="test.css" />
+</h:head>
+<h:body>
 
-        <h1>#{testView.string}</h1>
-        <h:form id="frmTest">
+  <h1>#{testView.string}</h1>
+  <h:form id="frmTest">
+    <p:growl
+      id="msgs"
+      showDetail="true"
+      skipDetailIfEqualsSummary="true" />
 
-        </h:form>
+    <p:dataTable
+      id="dataTable"
+      widgetVar="dataTableWidget"
+      var="element"
+      value="#{testView.list}"
+      rowKey="#{element.id}"
+      selectionMode="single"
+      selection="#{testView.selectedObject}"
+      filteredValue="#{testView.filteredList}">
 
-    </h:body>
+      <p:column headerText="ID">
+        <h:outputText value="#{element.id}" />
+      </p:column>
+
+      <p:column headerText="Name">
+        <h:outputText value="#{element.name}" />
+      </p:column>
+
+      <p:column
+        headerText="Artist"
+        filterBy="#{element.artist}"
+        filterValue="#{testView.filterArtist}">
+        <h:outputText value="#{element.artist}" />
+      </p:column>
+    </p:dataTable>
+
+    <p:commandLink
+      value="Set default filter"
+      action="#{testView.activateDefaultFilter}"
+      update=":frmTest:dataTable"
+      oncomplete="PF('dataTableWidget').filter();" />
+  </h:form>
+
+</h:body>
 </html>
