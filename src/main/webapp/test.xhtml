@@ -1,21 +1,65 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:f="jakarta.faces.core"
-      xmlns:h="jakarta.faces.html"
-      xmlns:p="primefaces">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="jakarta.faces.facelets"
+  xmlns:f="jakarta.faces.core"
+  xmlns:h="jakarta.faces.html"
+  xmlns:p="primefaces">
 
-    <h:head>
-        <title>PrimeFaces Test</title>
-        <h:outputScript name="test.js" />
-        <h:outputStylesheet name="test.css" />
-    </h:head>
-    <h:body>
+<h:head>
+  <title>PrimeFaces Test</title>
+  <h:outputScript name="test.js" />
+  <h:outputStylesheet name="test.css" />
+</h:head>
+<h:body>
 
-        <h1>#{testView.string}</h1>
-        <h:form id="frmTest">
+  <h1>#{testView.string}</h1>
+  <h:form id="frmTest">
+    <p:growl
+      id="msgs"
+      showDetail="true"
+      skipDetailIfEqualsSummary="true" />
 
-        </h:form>
+    <p:dataTable
+      id="dataTable"
+      widgetVar="dataTableWidget"
+      var="element"
+      value="#{testView.lazyDataModel}"
+      rowKey="#{element.id}"
+      selectionMode="single"
+      selection="#{testView.selectedObject}">
 
-    </h:body>
+      <p:column headerText="ID">
+        <h:outputText value="#{element.id}" />
+      </p:column>
+
+      <p:column headerText="Name" filterBy="#{element.name}">
+        <h:outputText value="#{element.name}" />
+      </p:column>
+
+      <p:column headerText="Artist" filterBy="#{element.artist}">
+        <h:outputText value="#{element.artist}" />
+      </p:column>
+
+      <p:column headerText="Details">
+        <p:commandLink
+          actionListener="#{testView.onClickDetailsIcon(element)}"
+          update=":frmTest:detailsIconPanel"
+          oncomplete="PF('detailsIconWidget').show('#{component.clientId}')"
+          rendered="#{not empty element.details}">
+          <em class="pi pi-search" />
+        </p:commandLink>
+      </p:column>
+    </p:dataTable>
+
+    <p:overlayPanel
+      id="detailsIconPanel"
+      widgetVar="detailsIconWidget"
+      dynamic="true"
+      style="width:400px">
+      <h:outputText value="#{testView.detailsMessage}" />
+    </p:overlayPanel>
+  </h:form>
+
+</h:body>
 </html>
