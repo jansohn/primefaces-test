@@ -5,7 +5,7 @@ import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,5 +24,8 @@ public class ChildJpa {
     private Long numberCol;
     private BigDecimal decimalCol;
     private Date dateCol;
+
+    @Transient
+    private String details;
 
 }
