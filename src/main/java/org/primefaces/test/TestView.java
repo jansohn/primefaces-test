@@ -3,8 +3,6 @@ package org.primefaces.test;
 import java.io.Serializable;
 import java.util.List;
 
-import org.primefaces.model.JPALazyDataModel;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -21,7 +19,7 @@ public class TestView implements Serializable {
 
     @Inject
     private EntityManager em;
-    private JPALazyDataModel<TestJpa> lazyDataModel;
+    private MyJpaLazyDataModel<TestJpa> lazyDataModel;
     private TestJpa selectedRow;
     private ChildJpa clickedChildJpa;
 
@@ -29,7 +27,7 @@ public class TestView implements Serializable {
     public void init() {
         string = "PrimeFaces JPA DataTable";
 
-        lazyDataModel = JPALazyDataModel.<TestJpa>builder()
+        lazyDataModel = MyJpaLazyDataModel.<TestJpa>myBuilder()
                 .entityClass(TestJpa.class)
                 .entityManager(() -> em)
                 .caseSensitive(false)
