@@ -21,6 +21,7 @@ public class TestView implements Serializable {
     private EntityManager em;
     private MyJpaLazyDataModel<TestJpa> lazyDataModel;
     private TestJpa selectedRow;
+    private List<ChildJpa> selectedChildren;
     private ChildJpa clickedChildJpa;
 
     @PostConstruct

@@ -29,10 +29,10 @@
       <p:ajax
         event="rowSelect"
         listener="#{testView.onRowSelect}"
-        update=":frmTest:childTableBox" />
+        update="@this :frmTest:childTableBox" />
       <p:ajax
         event="rowUnselect"
-        update=":frmTest:childTableBox" />
+        update="@this :frmTest:childTableBox" />
       <p:column field="id" />
       <p:column field="stringCol" />
       <p:column
@@ -57,8 +57,15 @@
         widgetVar="childTable"
         var="child"
         value="#{testView.selectedRow.children}"
+        rowKey="#{child.id}"
+        selectionMode="multiple"
+        selection="#{testView.selectedChildren}"
+        selectionRowMode="none"
         rows="5"
         rendered="#{not empty testView.selectedRow.children}">
+        <p:column
+          selectionBox="true"
+          style="width:1.5rem;text-align:center" />
         <p:column field="id" />
         <p:column field="stringCol" />
         <p:column

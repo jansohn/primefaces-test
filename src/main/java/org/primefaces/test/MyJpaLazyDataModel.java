@@ -27,9 +27,15 @@ public class MyJpaLazyDataModel<T> extends JPALazyDataModel<T> implements Serial
     private static final long serialVersionUID = 1L;
 
     private List<T> results = new ArrayList<>();
+    private Integer firstCache;
+    private Integer pageSizeCache;
+    private Map<String, SortMeta> sortByCache;
+    private Map<String, FilterMeta> filterByCache;
 
     @Override
     public List<T> load(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
+        if (this.useCache(first, pageSize, sortBy, filterBy)) { return this.results; }
+
         this.results = super.load(first, pageSize, sortBy, filterBy);
         System.out.println(String.format("Fetched %d results from DB.", this.results.size()));
 
@@ -45,6 +51,20 @@ public class MyJpaLazyDataModel<T> extends JPALazyDataModel<T> implements Serial
         }
 
         return null;
+    }
+
+    private boolean useCache(Integer first, Integer pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
+        try {
+            return Objects.equals(this.firstCache, first)
+                    && Objects.equals(this.pageSizeCache, pageSize)
+                    && Objects.equals(this.sortByCache, sortBy)
+                    && Objects.equals(this.filterByCache, filterBy);
+        } finally {
+            this.firstCache = first;
+            this.pageSizeCache = pageSize;
+            this.sortByCache = sortBy;
+            this.filterByCache = filterBy;
+        }
     }
 
     public static <T> Builder<T> myBuilder() {
