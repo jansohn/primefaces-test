@@ -1,34 +1,44 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="jakarta.faces.html"
-	xmlns:f="jakarta.faces.core"
-	xmlns:pt="jakarta.faces.passthrough"
-	xmlns:jsf="jakarta.faces"
-	xmlns:ui="jakarta.faces.facelets"
-	xmlns:p="primefaces">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="jakarta.faces.html"
+  xmlns:f="jakarta.faces.core"
+  xmlns:pt="jakarta.faces.passthrough"
+  xmlns:jsf="jakarta.faces"
+  xmlns:ui="jakarta.faces.facelets"
+  xmlns:p="primefaces">
 
-    <h:head>
-        <title>PrimeFaces Test</title>
-        <h:outputScript name="test.js" />
-        <h:outputStylesheet name="test.css" />
-    </h:head>
-    <h:body>
+<h:head>
+  <title>PrimeFaces Test</title>
+  <h:outputScript name="test.js" />
+  <h:outputStylesheet name="test.css" />
+</h:head>
+<h:body>
 
-        <h1>#{testView.string}</h1>
-        <h:form id="frmTest">
-            <p:dataTable id="tblJpa" widgetVar="jpaTable" var="row" value="#{testView.lazyDataModel}" rows="5">
-                <p:column field="id" />
-                <p:column field="stringCol" />
-                <p:column field="numberCol" filterMatchMode="gt" />
-                <p:column field="decimalCol" filterMatchMode="gt" />
-                <p:column field="dateCol" >
-                    <f:facet name="filter">
-                        <p:datePicker onchange="PF('jpaTable').filter()" />
-                    </f:facet>
-                </p:column>
-                <p:column field="child.stringCol" />
-            </p:dataTable>
-        </h:form>
+  <h1>#{testView.string}</h1>
 
-    </h:body>
+    <h:form id="frmTest">
+      <p:dataTable
+        id="tblJpa"
+        widgetVar="jpaTable"
+        var="row"
+        value="#{testView.lazyDataModel}"
+        rows="5">
+        <p:column field="id" />
+        <p:column field="stringCol" />
+        <p:column
+          field="numberCol"
+          filterMatchMode="gt" />
+        <p:column
+          field="decimalCol"
+          filterMatchMode="gt" />
+        <p:column field="dateCol">
+          <f:facet name="filter">
+            <p:datePicker onchange="PF('jpaTable').filter()" />
+          </f:facet>
+        </p:column>
+      </p:dataTable>
+    </h:form>
+
+</h:body>
 </html>

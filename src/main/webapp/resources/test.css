@@ -1,1 +1,4 @@
 /* Place any CSS here you want loaded in test.xhtml */
+.child-table-box {
+  margin-top: 1em;
+}
