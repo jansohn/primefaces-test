@@ -96,7 +96,6 @@
           <p:column headerText="Details">
             <p:commandLink
               actionListener="#{testView.onClickDetailsIcon(child)}"
-              update=":frmTest:detailsIconPanel"
               oncomplete="PF('detailsIconWidget').show('#{component.clientId}')"
               rendered="#{not empty child.details}">
               <em class="pi pi-search" />
@@ -109,6 +108,7 @@
         id="detailsIconPanel"
         widgetVar="detailsIconWidget"
         dynamic="true"
+        cache="false"
         style="width:400px">
         <h:outputText value="#{testView.detailsMessage}" />
       </p:overlayPanel>
