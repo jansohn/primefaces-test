@@ -1,15 +1,18 @@
 package org.primefaces.test;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.math.BigDecimal;
-import jakarta.annotation.PostConstruct;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.primefaces.component.tabview.Tab;
+import org.primefaces.event.TabChangeEvent;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
 import lombok.Data;
 
 @Data
@@ -22,6 +25,7 @@ public class TestView implements Serializable {
     private BigDecimal decimal;
     private LocalDateTime localDateTime;
     private List<TestObject> list;
+    private List<String> notifications;
 
     @PostConstruct
     public void init() {
@@ -30,8 +34,14 @@ public class TestView implements Serializable {
                 new TestObject("Thriller", "Michael Jackson", 1982),
                 new TestObject("Back in Black", "AC/DC", 1980),
                 new TestObject("The Bodyguard", "Whitney Houston", 1992),
-                new TestObject("The Dark Side of the Moon", "Pink Floyd", 1973)
-        ));
+                new TestObject("The Dark Side of the Moon", "Pink Floyd", 1973)));
     }
 
+    public void onTabChange(TabChangeEvent<Tab> event) {
+        String tabId = event.getTab().getId();
+
+        if ("notificationsTab".equals(tabId)) {
+            this.notifications = Arrays.asList("Notification 1");
+        }
+    }
 }

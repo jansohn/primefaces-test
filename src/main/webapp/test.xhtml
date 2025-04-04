@@ -1,21 +1,42 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:f="jakarta.faces.core"
-      xmlns:h="jakarta.faces.html"
-      xmlns:p="primefaces">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="jakarta.faces.facelets"
+  xmlns:f="jakarta.faces.core"
+  xmlns:h="jakarta.faces.html"
+  xmlns:p="primefaces">
 
-    <h:head>
-        <title>PrimeFaces Test</title>
-        <h:outputScript name="test.js" />
-        <h:outputStylesheet name="test.css" />
-    </h:head>
-    <h:body>
+<h:head>
+  <title>PrimeFaces Test</title>
+  <h:outputScript name="test.js" />
+  <h:outputStylesheet name="test.css" />
+</h:head>
+<h:body>
 
-        <h1>#{testView.string}</h1>
-        <h:form id="frmTest">
+  <h1>#{testView.string}</h1>
+  <h:form id="frmTest">
+    <p:tabView
+      id="tabs"
+      dynamic="true"
+      cache="false">
+      <p:ajax
+        event="tabChange"
+        listener="#{testView.onTabChange}"
+        update=":frmTest:tabs:notificationsBadge" />
+      <p:tab
+        id="overviewTab"
+        title="Overview"></p:tab>
+      <p:tab id="notificationsTab">
+        <f:facet name="title">
+          <h:outputText value="Notifications" />
+          <p:badge
+            id="notificationsBadge"
+            value="#{empty testView.notifications ? '?' : testView.notifications.size()}"
+            class="ml-1" />
+        </f:facet>
+      </p:tab>
+    </p:tabView>
+  </h:form>
 
-        </h:form>
-
-    </h:body>
+</h:body>
 </html>
