@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 import org.apache.commons.lang3.SerializationUtils;
@@ -60,13 +61,39 @@ public class CachingJpaLazyDataModel<T> extends JPALazyDataModel<T> implements S
             return Objects.equals(this.firstCache, first)
                     && Objects.equals(this.pageSizeCache, pageSize)
                     && Objects.equals(this.sortByCache, sortBy)
-                    && Objects.equals(this.filterByCache, filterBy);
+                    && this.equalsFilterBy(this.filterByCache, filterBy);
         } finally {
             this.firstCache = first;
             this.pageSizeCache = pageSize;
             this.sortByCache = SerializationUtils.clone(new HashMap<>(sortBy));
             this.filterByCache = SerializationUtils.clone(new HashMap<>(filterBy));
         }
+    }
+
+    private boolean equalsFilterBy(Map<String, FilterMeta> filterByA, Map<String, FilterMeta> filterByB) {
+        if (filterByA == filterByB) { return true; }
+
+        if (filterByA.size() != filterByB.size()) { return false; }
+
+        try {
+            for (Entry<String, FilterMeta> e : filterByA.entrySet()) {
+                String key = e.getKey();
+                FilterMeta value = e.getValue();
+                if (value == null) {
+                    if (!(filterByB.get(key) == null && filterByB.containsKey(key))) { return false; }
+                } else {
+                    FilterMeta otherValue = filterByB.get(key);
+                    if (!value.equals(otherValue)) { return false; }
+
+                    // FilterMeta currently does not check filterValue in its equals method...
+                    if (!Objects.equals(value.getFilterValue(), otherValue.getFilterValue())) { return false; }
+                }
+            }
+        } catch (ClassCastException | NullPointerException unused) {
+            return false;
+        }
+
+        return true;
     }
 
     public static <T> Builder<T> myBuilder() {
